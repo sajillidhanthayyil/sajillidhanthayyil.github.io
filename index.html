@@ -19,7 +19,8 @@
   <meta name="twitter:description" content="Java Backend Engineer with 4+ years of experience in Java, Spring Boot, Microservices and Apache Kafka." />
 
   <meta name="theme-color" content="#0b1120" />
-  <link rel="icon" href="favicon.ico" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -28,10 +29,10 @@
   <link rel="stylesheet" href="styles.css" />
 
   <script>
-    try {
-      const t = localStorage.getItem("theme");
-      if (t) document.documentElement.dataset.theme = t;
-    } catch (e) { /* storage blocked: follow system theme */ }
+    // Dark by default; a visitor's own choice is remembered
+    let theme = "dark";
+    try { theme = localStorage.getItem("theme") || "dark"; } catch (e) { /* storage blocked */ }
+    document.documentElement.dataset.theme = theme;
   </script>
 </head>
 <body>
@@ -294,6 +295,8 @@
       <a href="#top">Back to top ↑</a>
     </div>
   </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="script.js" defer></script>
 </body>

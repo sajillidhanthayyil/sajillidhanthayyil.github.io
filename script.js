@@ -6,14 +6,34 @@
   document.getElementById("year").textContent = new Date().getFullYear();
 
   // Theme toggle: flips between light and dark and remembers the choice
-  const isDark = () =>
-    root.dataset.theme === "dark" ||
-    (!root.dataset.theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
-
   document.getElementById("theme-toggle").addEventListener("click", () => {
-    const next = isDark() ? "light" : "dark";
+    const next = root.dataset.theme === "light" ? "dark" : "light";
     root.dataset.theme = next;
     try { localStorage.setItem("theme", next); } catch (e) { /* storage blocked */ }
+  });
+
+  // Email links: mailto does nothing without a desktop mail app,
+  // so also copy the address and say so
+  const toast = document.getElementById("toast");
+  let toastTimer;
+  const showToast = (text) => {
+    toast.textContent = text;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 3500);
+  };
+  document.querySelectorAll('a[href^="mailto:"]').forEach((a) => {
+    a.addEventListener("click", () => {
+      const email = a.getAttribute("href").slice("mailto:".length);
+      if (!navigator.clipboard) {
+        showToast("Email: " + email);
+        return;
+      }
+      navigator.clipboard.writeText(email).then(
+        () => showToast("Email address copied: " + email),
+        () => showToast("Email: " + email)
+      );
+    });
   });
 
   // Mobile menu
